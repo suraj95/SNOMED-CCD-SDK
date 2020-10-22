@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<project name="ForCCDLib" default="makeForCCDLib" basedir=".">
+	<property name="CCDCORE_BUILD_SCRIPT_PATH" location="../Sources/CCDCore/ForCCDCore/Associated Files"></property>
+	<property name="CCDLIBBUILD_SCRIPT_PATH" location="../Sources/CCDLib/ForCCDLib/Associated Files"></property>
+	
+	
+	
+	<target name ="makeForCCDLib" depends="makeForCCDCore" description="Call all CCD Lib build Scripts">
+				<!-- Call Build Scripts according to Project Dependency -->		
+				<subant buildpath="${CCDLIBBUILD_SCRIPT_PATH}" antfile="project_build_script.xml" />
+	</target>
+		
+	<target name ="makeForCCDCore" description="Call all CCD Core build Scripts">
+				<!-- Call Build Scripts according to Project Dependency -->		
+				<subant buildpath="${CCDCORE_BUILD_SCRIPT_PATH}" antfile="project_build_script.xml" />
+	</target>
+	
+</project>

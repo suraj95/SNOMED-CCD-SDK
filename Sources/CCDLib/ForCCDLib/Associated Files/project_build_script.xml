@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ForCCDLib" default="makeForCCDLib" basedir="../.">
+	<description>
+
+	</description>
+
+	<property name="Binaries" location="../../../Shared/Binaries"></property>
+	<property name="SRC_DIR" location="src/cdac/medinfo/"></property>
+	<property name="OUTPUT_DIR" location="../../../Shared/Binaries/Libs"></property>
+	<property name="DEBUG_OUTPUT_DIR" location="../../../Shared/Binaries/Libs/Debug"></property>
+	<property name="THIRD_PARTY_DELIVERABLES_DIR" location="../../../Shared/Binaries/ThirdPartyComponents"></property>
+
+	<!-- set classpath for compiling the source code -->
+	<path id="class.debug.path">
+		<fileset dir="${Binaries}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	<path id="class.thirdparty.path">
+		<fileset dir="${THIRD_PARTY_DELIVERABLES_DIR}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	<target name="clean">
+		<!--<delete dir="${DEBUG_OUTPUT_DIR}/cdac/medinfo/" />
+		<delete file="${Binaries}/ccdlib.jar" /> -->
+	</target>
+
+	<target name="makeForCCDLib">
+		<antcall target="clean"></antcall>
+		<mkdir dir="${OUTPUT_DIR}/Debug" />
+		<antcall target="makeccdlibJAR"></antcall>
+	</target>
+	<target name="makeccdlibJAR" description="Make jar file of CCD lib ">
+		<!-- Compile common package -->
+		<javac srcdir="${SRC_DIR}" destdir="${DEBUG_OUTPUT_DIR}" debug="true">
+			<classpath refid="class.debug.path" />
+			<classpath refid="class.thirdparty.path" />
+			<compilerarg value="-Xlint:-path" />
+		</javac>
+		<copy file="${SRC_DIR}/utils/ccdconfig.properties" todir="${DEBUG_OUTPUT_DIR}/cdac/medinfo/utils"/>
+		<copy file="${SRC_DIR}/resources/exceptions.properties" todir="${DEBUG_OUTPUT_DIR}/cdac/medinfo/resources"/>
+		<copy file="${SRC_DIR}/resources/status.properties" todir="${DEBUG_OUTPUT_DIR}/cdac/medinfo/resources"/>
+		<copy file="${SRC_DIR}/resources/warning.properties" todir="${DEBUG_OUTPUT_DIR}/cdac/medinfo/resources"/> 
+		<jar jarfile="${Binaries}/ccdlib.jar" includes="cdac/"
+			basedir="${DEBUG_OUTPUT_DIR}">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Created-By" value="JAVA  ${java.version}"/>
+				<section name="cdac/">
+					<attribute name="Sealed" value="true" />
+				</section>
+			</manifest>
+		</jar>
+	</target>
+</project>
